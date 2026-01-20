@@ -40,9 +40,7 @@ public class SaleController {
 			@RequestParam(required = false) String maxDate,
 			@RequestParam(required = false) String name,
 			Pageable pageable) {
-		Page<SaleSummaryDTO> result =
-				service.summary(minDate, maxDate, name, pageable);
-
+		Page<SaleSummaryDTO> result = service.summary(minDate, maxDate, name, pageable);
 		return ResponseEntity.ok(result);
 	}
 }
