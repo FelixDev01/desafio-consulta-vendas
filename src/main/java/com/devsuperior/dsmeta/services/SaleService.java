@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.Optional;
 
 import com.devsuperior.dsmeta.dto.SaleReportDTO;
+import com.devsuperior.dsmeta.dto.SaleSummaryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,5 +53,29 @@ public class SaleService {
 
 		Page<Sale> report = repository.searchLastSales(min, max, name, pageable);
 		return report.map(x -> new SaleReportDTO(x));
+	}
+
+	public Page<SaleSummaryDTO> summary(String minDate, String maxDate, String name, Pageable pageable) {
+
+		LocalDate max;
+		LocalDate min;
+
+		if (maxDate == null){
+			max = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
+		} else {
+			max = LocalDate.parse(maxDate);
+		}
+
+		if (minDate == null){
+			min = max.minusYears(1L);
+		} else {
+			min = LocalDate.parse(minDate);
+		}
+
+		if (name == null){
+			name = "";
+		}
+
+		return repository.searchSalesSummary(min, max, name, pageable);
 	}
 }
